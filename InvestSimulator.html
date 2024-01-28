@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio en Fond</title>
+</head>
+<body>
+
+<audio controls autoplay loop>
+    <source src="lofi.mp4" type="audio/mp4">
+    <!-- Ajoutez des balises source supplémentaires pour d'autres formats audio -->
+    Votre navigateur ne supporte pas l'élément audio.
+</audio>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestSimulator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+        }
+        canvas {
+            background-color: black;
+        }
+        #result {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <img class="top-right-image" src="Baner.jpg">
+    <label for="investment">Initial investment ($): </label>
+    <input type="number" id="investment" placeholder="Enter the amount" />
+    <br>
+
+    <label for="rate">Daily growth rate (%): </label>
+    <input type="number" id="rate" placeholder="Enter the rate" />
+    <br>
+
+    <label for="days">Days: </label>
+    <input type="number" id="days" placeholder="Enter the number of days" />
+    <br>
+
+    <button onclick="calculate()">Calculate</button>
+    <button onclick="resetChart()">Reset</button>
+
+    <h2>Result</h2>
+    <p id="result">The result will appear.</p>
+
+    <canvas id="myChart" width="400" height="200"></canvas>
+
+    <script>
+        var myChart;
+
+        function calculate() {
+            var investment = parseFloat(document.getElementById('investment').value);
+            var rate = parseFloat(document.getElementById('rate').value);
+            var days = parseInt(document.getElementById('days').value);
+
+            if (isNaN(investment) || isNaN(rate) || isNaN(days) || investment <= 0 || rate <= 0 || days <= 0) {
+                alert('Please enter valid, positive values.');
+                return;
+            }
+
+            var labels = [];
+            var data = [];
+
+            for (var i = 0; i <= days; i++) {
+                labels.push('Days ' + i);
+                data.push(investment * Math.pow(1 + rate / 100, i));
+            }
+
+            var resultText = 'After ' + days + ' days, your investment will be $' + data[days].toFixed(2);
+            document.getElementById('result').innerHTML = resultText;
+            document.getElementById('result').style.color = 'red';  // Set the text color to red
+
+            var ctx = document.getElementById('myChart').getContext('2d');
+
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Evolution of investment',
+                        data: data,
+                        fill: false,
+                        borderColor: 'green',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: [{
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }],
+                        y: [{
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+
+        function resetChart() {
+            if (myChart) {
+                myChart.destroy();
+                document.getElementById('result').innerHTML = 'The result will appear here.';
+                document.getElementById('result').style.color = 'white';  // Reset text color to white
+            }
+        }
+    </script>
+
+</body>
+</html>
